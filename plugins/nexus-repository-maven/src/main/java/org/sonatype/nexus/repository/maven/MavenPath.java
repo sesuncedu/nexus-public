@@ -44,7 +44,7 @@ public class MavenPath
      * {@link HashAlgorithm}s corresponding to {@link HashType}s.
      */
     public static final List<HashAlgorithm> ALGORITHMS = ImmutableList
-        .of(SHA1.getHashAlgorithm(), MD5.getHashAlgorithm());
+        .of(SHA1.getHashAlgorithm(), HashAlgorithm.SHA256, MD5.getHashAlgorithm());
 
     private final String ext;
 

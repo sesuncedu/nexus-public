@@ -70,6 +70,7 @@ public class MetadataUpdaterTest
 
   private final Map<HashAlgorithm, HashCode> hashes = ImmutableMap.of(
       HashAlgorithm.SHA1, HashAlgorithm.SHA1.function().hashString("sha1", StandardCharsets.UTF_8),
+      HashAlgorithm.SHA256, HashAlgorithm.SHA256.function().hashString("sha256", StandardCharsets.UTF_8),
       HashAlgorithm.MD5, HashAlgorithm.MD5.function().hashString("md5", StandardCharsets.UTF_8)
   );
 

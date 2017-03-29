@@ -349,7 +349,7 @@ public class MavenFacetImpl
           path.isSubordinate() ? AssetKind.ARTIFACT_SUBORDINATE.name() : AssetKind.ARTIFACT.name()
       );
     }
-
+    BundleMetadataSupport.extractOsgiAttributes(asset,assetBlob);
     putAssetPayload(tx, asset, assetBlob, contentAttributes);
     asset.markAsDownloaded();
     tx.saveAsset(asset);

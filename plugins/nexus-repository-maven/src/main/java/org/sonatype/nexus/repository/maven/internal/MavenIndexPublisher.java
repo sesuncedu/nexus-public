@@ -94,6 +94,12 @@ public final class MavenIndexPublisher
 
   private static final String INDEX_PROPERTY_FILE = "/.index/nexus-maven-repository-index.properties";
 
+  /**
+   * Entry key for SHA-256 checksum, as proposed for org.apache.maven.index.reader package version 5.2.0
+   * (see 
+   */
+  private static final EntryKey<String> RECORD_SHA_256 = new EntryKey<>("sha256",String.class);
+
   private static final String INDEX_MAIN_CHUNK_FILE = "/.index/nexus-maven-repository-index.gz";
 
   private static final String SELECT_HOSTED_ARTIFACTS =
@@ -109,15 +115,17 @@ public final class MavenIndexPublisher
           "name AS path, " +
           "attributes.content.last_modified AS contentLastModified, " +
           "size AS contentSize, " +
-          "attributes.checksum.sha1 AS sha1 " +
+          "attributes.checksum.sha1 AS sha1, " +
+          "attributes.checksum.sha256 AS sha256, " +
+          BundleMetadataSupport.OSGI_SELECT_FIELDS +
           "FROM asset " +
           "WHERE bucket=:bucket " +
           "AND attributes.maven2.asset_kind=:asset_kind " +
           "AND component IS NOT NULL";
 
-  private static final RecordExpander RECORD_EXPANDER = new RecordExpander();
+  private static final RecordExpander RECORD_EXPANDER = new BundleMetadataSupport.EnhancedOsgiRecordExpander();
 
-  private static final RecordCompactor RECORD_COMPACTOR = new RecordCompactor();
+  private static final RecordCompactor RECORD_COMPACTOR = new BundleMetadataSupport.EnhancedOsgiRecordCompactor();
 
   private MavenIndexPublisher() {
     // nop
@@ -302,6 +310,10 @@ public final class MavenIndexPublisher
     record.put(Record.FILE_MODIFIED, document.field("contentLastModified", Long.class));
     record.put(Record.FILE_SIZE, document.field("contentSize", Long.class));
     record.put(Record.SHA1, document.field("sha1", String.class));
+    record.put(RECORD_SHA_256, document.field("sha256", String.class));
+
+    BundleMetadataSupport.addOsgiFieldsToRecord(record,document);
+
     return record;
   }
 
